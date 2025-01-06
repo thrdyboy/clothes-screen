@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id         Int     @id @default(autoincrement())
+  name       String?
+  fromOrigin String?
+
+  item Item[]
+}
+
+model Clothes {
+  id             Int     @id @default(autoincrement())
+  front          String?
+  rightSide      String?
+  leftSide       String?
+  behind         String?
+  screenPrinting String?
+  nameClothes    String? @unique
+  namePrinting   String? @unique
+  price          Int?
+  customized     Boolean @default(false)
+
+  item Item[]
+}
+
+model Item {
+  cartId     Int    @id @default(autoincrement())
+  customerID Int    @unique
+  clothesID  Int    @unique
+  taxprice   Float?
+
+  clothes  Clothes   @relation(fields: [clothesID], references: [id])
+  customer Customer  @relation(fields: [customerID], references: [id])
+  invoice  Invoice[]
+}
+
+model Invoice {
+  id          Int      @id @default(autoincrement())
+  paymentCode String   @unique
+  dateIssued  DateTime @default(now())
+
+  item Item[]
+}

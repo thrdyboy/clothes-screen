@@ -1,0 +1,3 @@
+[submodule "my-web"]
+	path = my-web
+	url = https://github.com/thrdyboy/clothes-screen.git
